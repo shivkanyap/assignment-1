@@ -19,7 +19,7 @@ class Register extends React.Component {
     componentDidMount() {
     axios.get('http://localhost:3005/department/allDepartments')
     .then((response)=>{
-    // console.log(response,'in category')
+    
         this.setState(()=>({
             departmentArray:response.data
               

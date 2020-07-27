@@ -64,8 +64,6 @@ class App extends React.Component{
               </ul>
             </nav>
 
-            
-         
           </div>
           <Switch>
           <Route path="/users/register" component={ Register } />

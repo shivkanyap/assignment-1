@@ -31,8 +31,10 @@ const MsgWindow = () => {
         </div>
         <div className="messagewindow">
         {notifications.map((item, index) => (
+                    
             <div>
-                    <ul className="nav navbar-nav"></ul>
+                    
+                    <ul  className="nav navbar-nav"></ul>
                     <div>{item.msg}</div>
             </div>
         ))}

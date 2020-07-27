@@ -22,12 +22,12 @@ class RequestForm extends React.Component
         error:false
         }
     }
-     errMessage=()=>{
+    errMessage=()=>{
         if(
-        this.state.createdBy ==="" &&
-        this.state.department === "" &&
-        this.state.user === "" &&
-        this.state.message === ""
+            this.state.createdBy ==="" &&
+            this.state.department === "" &&
+            this.state.user === "" &&
+            this.state.message === ""
         ){
 
             this.setState({error:true})
@@ -35,38 +35,38 @@ class RequestForm extends React.Component
     }
     componentDidMount(){
         axios.get('http://localhost:3005/department/allDepartments',{
-          headers:{
-              'x-auth':localStorage.getItem('token')
-          }
-      })
+            headers:{
+                'x-auth':localStorage.getItem('token')
+            }
+        })
 
-      .then((response)=>{
-          this.setState(()=>({
-              departmentArray:response.data
+        .then((response)=>{
+            this.setState(()=>({
+                departmentArray:response.data
               
-          }))
-    })
+            }))
+        })
 
-    axios.get('http://localhost:3005/users/allUsers',{
-          headers:{
-              'x-auth':localStorage.getItem('token')
-          }
-      })
+        axios.get('http://localhost:3005/users/allUsers',{
+            headers:{
+                'x-auth':localStorage.getItem('token')
+            }
+        })
 
-      .then((response)=>{
-          this.setState(()=>({
-              userArray:response.data
+        .then((response)=>{
+            this.setState(()=>({
+                userArray:response.data
               
-          }))
-    })
-    axios.get('http://localhost:3005/users/loggedinuser',{
-        headers:{
-            'x-auth':localStorage.getItem('token')
-        }
-      })
+            }))
+        })
+        axios.get('http://localhost:3005/users/loggedinuser',{
+            headers:{
+                'x-auth':localStorage.getItem('token')
+            }
+        })
 
-    .then((response)=>{
-        this.setState(()=>({
+        .then((response)=>{
+            this.setState(()=>({
             loggedInUser:response.data
             
         }))
@@ -86,9 +86,10 @@ class RequestForm extends React.Component
             assignedUser : this.state.user,
             message : this.state.message
         }
-        // let msgData = {
-        //     msg: `form created by user`
-        // };
+        let msgData = {
+            msg: `form created by ${this.state.loggedInUser.username}`,
+            userid:this.state.loggedInUser._id
+        };
         axios.post(`http://localhost:3005/requestform/create`,formData,{
         
             headers:{
@@ -97,14 +98,7 @@ class RequestForm extends React.Component
             }
         })
         .then(response => {
-            console.log(response)
-            // axios.post(`http://localhost:3005/notification/create`, msgData, {
-            // headers: {
-            //   'x-auth': localStorage.getItem('token')
-            // }
-            // })
-            console.log(response.data,'in response')
-            // this.props.history.push('/requestform/pending')
+            
             
             if (response.data.status === "pending")
             {
@@ -112,6 +106,11 @@ class RequestForm extends React.Component
                     this.props.history.push("/requestform/pending");
                  }, 5000);
             }
+            axios.post(`http://localhost:3005/notification/create`, msgData, {
+                headers: {
+                    'x-auth': localStorage.getItem('token')
+                }
+            })
             this.setState(()=>({
                 createdBy:'',
                 department:'',
@@ -124,16 +123,16 @@ class RequestForm extends React.Component
     }
     notify = () => {
         toast.success("Request Sent Successfully", {
-          position: "top-right",
-          autoClose: 4000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
+            position: "top-right",
+            autoClose: 4000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined
         });
         this.setState({error:false})
-        //this.handleSubmit
+        
       };
     render() {
     
@@ -141,9 +140,9 @@ class RequestForm extends React.Component
 
             <fieldset>
               
-                 <h2 className="formheader">Form </h2>
-                 <ToastContainer />
-            <div className="form-group col-md-8">
+                <h2 className="formheader">Form </h2>
+                <ToastContainer />
+                <div className="form-group col-md-8">
                 {this.state.error?(<div style={{color:'red' ,textAlign:'center'}}>All fields are required</div>):null}
                 <Form onSubmit={this.handleSubmit} className="formcenter">
                 <div>
@@ -203,27 +202,18 @@ class RequestForm extends React.Component
                             </Col>
                         </FormGroup>
                     </div>
-                    {/* <input type="submit"
-                    onClick={
-                        this.state.createdBy !== "" &&
-                        this.state.department !== "" &&
-                        this.state.user !== "" &&
-                        this.state.message !== ""
-                          ? this.notify
-                          : () => null
-                      } className="btn btn-primary submit"></input>
-                      */}
-                      <Button type="submit" color="primary" size="sm"
-                       onClick={
-                        this.state.createdBy !== "" &&
-                        this.state.department !== "" &&
-                        this.state.user !== "" &&
-                        this.state.message !== ""
-                          ? this.notify
-                          :this.errMessage
-                      }  >
-                            Submit
-                      </Button>
+                    
+                        <Button type="submit" color="primary" size="sm"
+                        onClick={
+                            this.state.createdBy !== "" &&
+                            this.state.department !== "" &&
+                            this.state.user !== "" &&
+                            this.state.message !== ""
+                            ? this.notify
+                            :this.errMessage
+                        }>
+                        Submit
+                        </Button>
                     <div className="form-group col-md-4"></div>
                 </div>
                 </Form>           

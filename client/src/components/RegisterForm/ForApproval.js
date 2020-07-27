@@ -2,7 +2,6 @@ import React from 'react'
 import axios from 'axios'
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
 import MsgWindow from '../MsgWindow/MsgWindow' 
 
 class ForApproval extends React.Component
@@ -29,7 +28,7 @@ class ForApproval extends React.Component
     handleApprove = (_id,username,userid) => {
         
         const confirm = window.confirm("Are you sure?")
-        if(confirm) {
+        if(confirm){
             const id = _id
             const updateData={
                 status:"approved"
@@ -37,14 +36,14 @@ class ForApproval extends React.Component
             let msgData = {
                 msg: `form approved by ${username} `,
                 userid:userid
-              };
-             axios.put(`http://localhost:3005/requestform/edit/${id}`,updateData, {
+            };
+            axios.put(`http://localhost:3005/requestform/edit/${id}`,updateData, {
                 headers: {
                     'x-auth' : localStorage.getItem('token')
                 }
             })
-            .then(response => {
-                console.log(response)
+            .then(response =>{
+               
                 if ((response.data.status = "approved")) {
                     this.setState({ approval: response.data });
                     setTimeout(() => {
@@ -52,15 +51,13 @@ class ForApproval extends React.Component
                     }, 5000);
                   }
                   // post api call to notification id & msg
-                });
-                axios.post(`http://localhost:3005/notification/create`, msgData, {
-                 headers: {
+            });
+            axios.post(`http://localhost:3005/notification/create`, msgData, {
+                headers: {
                     'x-auth': localStorage.getItem('token')
-            }
-          });
-                // post api call to notification id & msg 
-                // this.props.history.push('/requestform/approved')
-            // })
+                }
+            });   
+           
         }
     }
 
@@ -81,18 +78,18 @@ class ForApproval extends React.Component
                 }
             })
             .then(response => {
-                console.log(response)
-                if ((response.data.status = "rejected")) {
+             
+                if((response.data.status = "rejected")) {
                     this.setState({ approval: response.data });
                     setTimeout(() => {
-                      this.props.history.push("/requestform/rejected");
+                        this.props.history.push("/requestform/rejected");
                     }, 5000);
-                  }
+                }
                   // post api call to notification id & msg
             });
             axios.post(`http://localhost:3005/notification/create`, msgData, {
                 headers: {
-                'x-auth': localStorage.getItem('token')
+                    'x-auth': localStorage.getItem('token')
                 }
             });   
         }
@@ -100,39 +97,39 @@ class ForApproval extends React.Component
     
     notify = () => {
         toast.success("Request Sent Successfully", {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
         });
-      };
-      notify = () => {
+    };
+    notify = () => {
         toast.success("Approved Sent Successfully", {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined
         });
-      };
-      notifyReject = () => {
+    };
+    notifyReject = () => {
         toast.success("Reject Sent Successfully", {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined
         });
-      };
+    };
     
-     render()
+    render()
     {
        
         return(
@@ -141,14 +138,14 @@ class ForApproval extends React.Component
                    
         <table border="2">
         <thead>
-          <tr  className="actiontext"> 
-            <th> Created By </th>  
-            <th> Assigned Dept </th>
-            <th> Asigned User </th>
-            <th> Message </th>
-            <th> Status </th> 
-            <th>Action</th>
-          </tr>
+            <tr  className="actiontext"> 
+                <th> Created By </th>  
+                <th> Assigned Dept </th>
+                <th> Asigned User </th>
+                <th> Message </th>
+                <th> Status </th> 
+                <th>Action</th>
+            </tr>
         </thead>
       
         <tbody className="actiontext">
@@ -156,8 +153,7 @@ class ForApproval extends React.Component
           this.state.pendingApprovalForms.map(form =>{
             return (
                 <>
-              {/* <ToastContainer /> */}
-              
+    
               <tr key ={form._id} className="actiontext">
               
                 <td> { form.createdBy.username } </td>
@@ -168,8 +164,8 @@ class ForApproval extends React.Component
                
                 <td>  
                     <ToastContainer />
-                     <button className="btn btn-primary btn-sm pd-1 mr-2" onClick={()=>this.handleApprove(form._id,form.assignedUser.username,form.assignedUser._id)}>Approve</button>
-                <button  className="btn btn-danger btn-sm pd-1 ml-2" onClick={()=>{this.handleReject(form._id,form.assignedUser.username,form.assignedUser._id ); return this.notifyReject();}}>Rejected</button>
+                    <button className="btn btn-primary btn-sm pd-1 mr-2" onClick={()=>this.handleApprove(form._id,form.assignedUser.username,form.assignedUser._id)}>Approve</button>
+                    <button  className="btn btn-danger btn-sm pd-1 ml-2" onClick={()=>{this.handleReject(form._id,form.assignedUser.username,form.assignedUser._id ); return this.notifyReject();}}>Rejected</button>
                 </td>
 
                </tr>
@@ -180,7 +176,7 @@ class ForApproval extends React.Component
         </tbody>
         
         </table>
-        {this.state.approval.status == "approved" ? this.notify() : null}
+        {this.state.approval.status === "approved" ? this.notify() : null}
       
         <MsgWindow/>
         </div>
